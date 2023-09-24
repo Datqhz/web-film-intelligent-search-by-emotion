@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/management.css}">
+    <link rel="stylesheet" th:href="@{/css/register.css}">
+    <div th:replace="fragments::html_head"></div>
+    <title>Dashboard</title>
+</head>
+
+<body>
+<div class="app-management">
+    <div th:replace="fragments::navbar_management"></div>
+    <div class="app-main">
+        <div class="app-sidebar">
+            <ul class="sidebar_menu">
+                <li class="sidebar_group">
+                    <div class="sidebar_group_head">
+                        <span>PHIM</span>
+                    </div>
+                    <a class="management-link" href="/management/filmCategory">
+                        <div class="sidebar_group-item">
+                            <i class="sidebar-icon fa-solid fa-layer-group"></i>
+                            <span>Quản lý thể loại</span>
+                        </div>
+                    </a>
+                    <a class="management-link" href="/management/Film">
+                        <div class="sidebar_group-item">
+                            <i class="sidebar-icon fa-solid fa-film"></i>
+                            <span>Quản lý phim</span>
+                        </div>
+                    </a>
+
+                </li>
+
+                <li class="sidebar_group">
+                    <div class="sidebar_group_head">
+                        <span>NGƯỜI DÙNG</span>
+                    </div>
+                    <a class="management-link" href="/management/User">
+                        <div class="sidebar_group-item">
+                            <i class="sidebar-icon fa-solid fa-user"></i>
+                            <span>Quản lý người dùng</span>
+                        </div>
+                    </a>
+                    <a class="management-link" href="/management/Premium">
+                        <div class="sidebar_group-item">
+                            <i class="sidebar-icon fa-solid fa-money-bill"></i>
+                            <span>Gói điểm</span>
+                        </div>
+                    </a>
+
+                </li>
+                <li class="sidebar_group">
+                    <div class="sidebar_group_head">
+                        <span>THỐNG KÊ</span>
+                    </div>
+                    <a class="management-link" href="/management/Revenue/GetDetail">
+                        <div class="sidebar_group-item">
+                            <i class="sidebar-icon fa-solid fa-sack-dollar"></i>
+                            <span>Doanh thu </span>
+                        </div>
+                    </a>
+
+                </li>
+            </ul>
+        </div>
+        <div class="app-main-container">
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>

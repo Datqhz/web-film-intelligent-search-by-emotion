@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bxh.css}">
+    <div th:replace="fragments::html_head"></div>
+    <title>Bảng xếp hạng</title>
+</head>
+
+<body>
+    <header th:replace="fragments::navbar"></header>
+    <div class="bxh_container">
+
+        <section class="container">
+
+            <div class="bxh_head">
+                <div class="bxh_head-title">
+                    BẢNG XẾP HẠNG
+                </div>
+<!--                <ul class="bxh_option">-->
+<!--                    <li class="bxh_option-item">Ngày</li>-->
+<!--                    <li class="bxh_option-item">Tháng</li>-->
+<!--                    <li class="bxh_option-item">Năm</li>-->
+<!--                </ul>-->
+            </div>
+            <div class="row">
+                <div class="col-3" th:each="data, dataStat : ${list}">
+                    <a th:href="@{/film-info (id=${data.filmID})}" class="film_link">
+                        <div class="film_item film--top">
+                            <div class="film_status">
+                                <span th:text="${dataStat.index + 1}"></span>
+                            </div>
+                            <img th:src="${data.imgTierList}" alt="" class="film_item_thumb">
+                            <div class="film_info film_info--green">
+                                <h3 class="film_name" th:text="${data.filmName}"></h3>
+                                <div class="film_detail">
+                                    <span class="film_title" th:text="${data.getNumberOfEp(data.filmID)} + ' Tập'"></span>
+                                    <span class="film_title" th:text="${data.getFilmView(data.filmID)} + ' Lượt xem'"></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script th:replace="fragments::navbar_js"></script>
+</body>
+
+</html>

@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <div th:replace="~{fragments::html_head}"></div>
+    <title>Trang chủ</title>
+</head>
+<body>
+    <div class="web_film">
+        <!-- Header -->
+        <header th:replace="~{fragments::navbar}"></header>
+        <div class="web_container">
+            <section class="container_child container">
+                <div>
+                    <a href="#" class="container_link">PHIM MỚI NHẤT</a>
+                </div>
+                <div class="row">
+                    <div th:each="data, dataStat : ${newestEp}" th:unless="${dataStat.index > 12}" class="col-3">
+                        <a th:href="@{/watch (id=${data.film.filmID}, ep=${data.epID})}" th:if="${user.checkFilmInMyList(data.film.filmID) ==1}" class="film_link">
+                            <div class="film_item">
+                                <img th:src="${data.imgPath}" alt="" class="film_item_thumb">
+                                <div class="film_info film_info--blue">
+                                    <h3 class="film_name" th:text="${data.film.filmName}"></h3>
+                                    <div class="film_detail">
+                                        <span class="film_title">
+                                            Tập
+                                            <span class="film_title" th:text="${data.epNum}"></span>
+                                        </span>
+
+                                        <span class="film_title">
+                                            <span class="film_title" th:text="${data.view}"></span>
+                                            lượt xem
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
+                        <a th:href="@{/film-info (id=${data.film.filmID})}" th:if="${user.checkFilmInMyList(data.film.filmID) ==0}" class="film_link">
+                            <div class="film_item">
+                                <img th:src="${data.imgPath}" alt="" class="film_item_thumb">
+                                <div class="film_info film_info--blue">
+                                    <h3 class="film_name" th:text="${data.film.filmName}"></h3>
+                                    <div class="film_detail">
+                                        <span class="film_title">
+                                            Tập
+                                            <span class="film_title" th:text="${data.epNum}"></span>
+                                        </span>
+
+                                        <span class="film_title">
+                                            <span class="film_title" th:text="${data.view}"></span>
+                                            lượt xem
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+            </section>
+
+
+            <!-- Top phim -->
+            <section class="container_child container">
+                <div>
+                    <a href="#" class="container_link">BẢNG XẾP HẠNG</a>
+                </div>
+
+                <div class="row">
+                    <div class="col-4">
+                        <a th:href="@{/film-info (id = ${tierList[0].filmID})}" class="film_link">
+                            <div class="film_item film--top">
+                                <div class="film_status">
+                                    <span th:text="${1}"></span>
+                                </div>
+                                <img th:src="${tierList[0].imgTierList}" alt="" class="film_item_thumb">
+                                <div class="film_info film_info--green">
+                                    <h3 class="film_top-name" th:text="${tierList[0].filmName}"></h3>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="row col-8">
+                        <div th:each="data, dataStat: ${tierList}" class="col-3" th:if="${dataStat.index != 0}">
+                            <a th:href="@{/film-info (id = ${data.filmID})}" class="film_link">
+                                <div class="film_item film--top">
+                                    <div class="film_status">
+                                        <span th:text="${dataStat.index + 1}"></span>
+                                    </div>
+                                    <img th:src="${data.imgTierList}" alt="" class="film_item_thumb">
+                                    <div class="film_info film_info--green">
+                                        <h3 class="film_top-name" th:text="${data.filmName}"></h3>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ANIME MOVIE -->
+            <section class="container_child container">
+                <div>
+                    <a href="#" class="container_link">ANIME MOVIE</a>
+                </div>
+
+                <div class="row">
+                    <div class="col-2" th:each="data, dataStat : ${movie}">
+                        <a th:href="@{/film-info (id = ${data.filmID})}" class="film_link">
+                            <div class="film_movie film--cm_soon">
+<!--                                <div class="film_status">-->
+<!--                                    <span>SẮP CHIẾU</span>-->
+<!--                                </div>-->
+                                <img th:src="${data.getImgPath()}" alt="" class="film_item_thumb" style=" height: 300px">
+                                <div class="film_info film_info--red">
+                                    <h3 class="film_name" th:text="${data.getFilmName()}"></h3>
+                                    <div class="film_detail">
+                                        <span class="film_title" th:text="${data.getFilmView(data.getFilmID())} + ' lượt xem'"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Hôm nay xem gì-->
+            <section class="container_child container">
+                <div>
+                    <a href="#" class="container_link">HÔM NAY XEM GÌ</a>
+                </div>
+
+                <div class="row">
+                    <div class="col-2" th:each="data, dataStat : ${randomFilm}">
+                        <a th:href="@{/film-info (id = ${data.filmID})}" class="film_link">
+<!--                            <a th:href="@{/watch (id=${data.getFilmID()}, ep=${data.episodeList[0].epID})}" class="film_link">-->
+                            <div class="film_movie film--cm_soon">
+
+                                <img th:src="${data.getImgPath()}" alt="" class="film_item_thumb" style=" height: 300px">
+                                <div class="film_info film_info--purple">
+                                    <h3 class="film_name" th:text="${data.getFilmName()}"></h3>
+                                    <div class="film_detail">
+                                        <span class="film_title" th:text="${data.getFilmView(data.getFilmID())} + ' lượt xem'"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer_content">
+                    <div class="social_links">
+                        <a href="" class="social_link">
+                            <i class="fa-brands fa-facebook-f"></i>
+                        </a>
+                        <a href="" class="social_link">
+                            <i class="fa-brands fa-instagram"></i>
+                        </a>
+                        <a href="" class="social_link">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+                        <a href="" class="social_link">
+                            <i class="fa-brands fa-youtube"></i>
+                        </a>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <h3 class="footer__heading">Giới thiệu</h3>
+                            <ul class="footer-list">
+                                <li class="footer-item">
+                                    <a href="" class="footer-item__link">Giới thiệu</a>
+                                </li>
+                                <li class="footer-item">
+                                    <a href="" class="footer-item__link">Tuyển dụng</a>
+                                </li>
+                                <li class="footer-item">
+                                    <a href="" class="footer-item__link">Điều khoản</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-3">
+                            <h3 class="footer__heading">Giới thiệu</h3>
+                            <ul class="footer-list">
+                                <li class="footer-item">
+                                    <a href="" class="footer-item__link">Giới thiệu</a>
+                                </li>
+                                <li class="footer-item">
+                                    <a href="" class="footer-item__link">Tuyển dụng</a>
+                                </li>
+                                <li class="footer-item">
+                                    <a href="" class="footer-item__link">Điều khoản</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-3">
+                            <h3 class="footer__heading">Giới thiệu</h3>
+                            <ul class="footer-list">
+                                <li class="footer-item">
+                                    <a href="" class="footer-item__link">Giới thiệu</a>
+                                </li>
+                                <li class="footer-item">
+                                    <a href="" class="footer-item__link">Tuyển dụng</a>
+                                </li>
+                                <li class="footer-item">
+                                    <a href="" class="footer-item__link">Điều khoản</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-3">
+                            <h3 class="footer__heading">Giới thiệu</h3>
+                            <ul class="footer-list">
+                                <li class="footer-item">
+                                    <a href="" class="footer-item__link">Giới thiệu</a>
+                                </li>
+                                <li class="footer-item">
+                                    <a href="" class="footer-item__link">Tuyển dụng</a>
+                                </li>
+                                <li class="footer-item">
+                                    <a href="" class="footer-item__link">Điều khoản</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </footer>
+    </div>
+    <script th:replace="fragments::navbar_js"></script>
+</body>
+</html> 
