@@ -510,3 +510,103 @@
     display: flex;
     align-items: center;
 }
+
+.search_option {
+    border: 0;
+    outline: 0;
+    font: inherit;
+    font-size: 1.3rem;
+    /* Personalize */
+    width: 14rem;
+    padding: 1rem 4rem 1rem 1rem;
+    color: #333;
+    border-radius: 0.25em;
+    cursor: pointer;
+}
+
+.header_navbar_item--disabled {
+    display: none;
+}
+.bxh_head-content {
+    font-size: 1.4rem;
+    color: #333;
+    margin-top: 8px;
+    margin-bottom: 24px;
+}
+.survey_box {
+    text-align: center;
+}
+.survey_text {
+    margin-bottom: 18px;
+    font-size: 1.3rem;
+
+}
+.survey_send{
+    display: flex;
+    justify-content: center;
+}
+
+.button_survey {
+    margin-left: 8px;
+    width: 75px;
+    color: #fff;
+    background-color: #f44a4a;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 18px 6px 18px;
+}
+
+.button_survey + .button_survey{
+    margin-right: 8px;
+}
+
+.button_no_satify{
+    background-color: #aaaaaa;
+    color: #fff;
+}
+
+.survey_icon{
+    color: rgb(255, 191, 0);
+    font-size: 2.5rem;
+    padding: 0 4px;
+}
+
+.icon_button{
+    margin-left: 8px;
+    border: none;
+    background-color: transparent;
+    color: #333;
+    font-size: 2.5rem;
+}
+.icon_button + .icon_button{
+    margin-right: 8px;
+}
+
+.icon_button-text{
+    font-size: 1.2rem;
+    display: none;
+}
+
+.icon_button:hover .icon_button-text{
+    display: block;
+}
+
+.button_joy:hover{
+    color: rgb(255, 191, 0);
+}
+.button_love:hover{
+    color: red;
+}
+.button_anger:hover{
+    color: rgba(255, 0, 0, 0.677);
+}
+.button_normal:hover{
+    color: yellow;
+}
+.button_fear:hover{
+    color: rgb(75, 21, 21);
+}
+.button_sad:hover{
+    color: rgb(0, 191, 255);
+}
+

@@ -1,7 +1,17 @@
 package ptit.wibulord.webfilm.controller;
 
 import jakarta.servlet.http.HttpSession;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONArray;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +22,7 @@ import ptit.wibulord.webfilm.model.*;
 import ptit.wibulord.webfilm.service.*;
 
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 @ComponentScan
 @Controller
@@ -305,6 +316,49 @@ public class HomeController {
 
         return "search";
     }
+
+    @RequestMapping("/search-intelligent")
+    public String searchIntelligent(ModelMap model, @RequestParam(value = "keyword") String keyword) {
+        CompletableFuture<Integer> apiResponse = postApiWithJsonAsync(keyword);
+        apiResponse.join();
+        // Xử lý kết quả khi nó hoàn thành
+        System.out.println("///////////////////////////////////////////////////////////b1/////////////////////////////////////////////");
+        apiResponse.thenAccept(response -> {
+            String categoryName = "";
+            switch (response){
+                case 0: //0 is sadness
+                    categoryName = "Phiêu lưu";
+                    model.addAttribute("emotion", "buồn" );
+                    break;
+                case 1: // 1 is joy
+                    categoryName = "Hành động";
+                    model.addAttribute("emotion", "vui vẻ" );
+                    break;
+                case 2: // 2 is love
+                    categoryName = "Lãng mạn";
+                    model.addAttribute("emotion", "yêu" );
+                    break;
+                case 3: // 3 is anger
+                    categoryName = "Hài hước";
+                    model.addAttribute("emotion", "tức giận" );
+                    break;
+                case 4: // 4 is fear
+                    categoryName = "Đời thường";
+                    model.addAttribute("emotion", "sợ hãi" );
+                    break;
+                default: // 5 is normal
+                    categoryName = "Kịch tính";
+                    model.addAttribute("emotion", "bình thường" );
+            }
+            System.out.println("///////////////////////////////////////////////////////////b2/////////////////////////////////////////////");
+            model.addAttribute("filmList", filmService.getFilmForRecommned(categoryName));
+            model.addAttribute("emotion_id", response );
+        });
+        model.addAttribute("user", user);
+        model.addAttribute("keyword", keyword);
+        //model.addAttribute("filmList", filmService.searchFilm(keyword));
+        return "search-intelligent";
+    }
     /////////////////////////////////////////thêm phim vào ds yêu thích & theo dõi//////////////////////////////////////////////////////////
     @RequestMapping("/set-fav-film")
     public String setFavFilm(@RequestParam(value = "favList") int idFavoriteList,
@@ -454,5 +508,46 @@ public class HomeController {
         }
         redirect.addFlashAttribute("message","Mã nhập vào không khớp!");
         return "redirect:/confirm";
+    }
+
+
+    public static CompletableFuture<Integer> postApiWithJsonAsync(String text) {
+        return CompletableFuture.supplyAsync(() -> {
+            HttpClient httpClient = HttpClients.createDefault();
+            HttpPost httpPost = new HttpPost("http://localhost:5000/api/predict"); // Thay thế URL bằng URL của API bạn muốn gọi
+
+            try {
+                // Định dạng dữ liệu JSON và thiết lập cho yêu cầu POST
+                JSONObject json = new JSONObject();
+                json.put("text", text);
+
+                // Thiết lập nội dung yêu cầu POST với mã UTF-8
+                StringEntity entity = new StringEntity(json.toString(), "UTF-8");
+                entity.setContentType("application/json");
+                httpPost.setEntity(entity);
+
+                HttpResponse response = httpClient.execute(httpPost);
+                HttpEntity responseEntity = response.getEntity();
+
+                // Xử lý kết quả và trả về dữ liệu từ API
+                String responseData = EntityUtils.toString(responseEntity);
+                JSONObject jsonObject = new JSONObject(responseData);
+                // Lấy trường "data" từ đối tượng JSON
+                if (jsonObject.has("data")) {
+                    JSONArray dataArray = jsonObject.getJSONArray("data");
+
+                    if (dataArray.length() > 0) {
+                        Integer data = dataArray.getInt(0);
+                        System.out.println("Data response: " + data);
+                        return data;
+                    }
+                }
+                System.out.println("Data response: null");
+                return null;
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException("API request failed");
+            }
+        });
     }
 }

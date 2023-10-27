@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/base.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/css/bxh.css}">
+    <div th:replace="fragments::html_head"></div>
+    <title>Kết quả tìm kiếm</title>
+</head>
+<body>
+<header th:replace="fragments::navbar"></header>
+<div class="bxh_container">
+    <section class="container">
+        <div class="bxh_head" style="display: block;">
+            <div class="bxh_head-title" th:text="'Kết quả tìm kiếm: ' + ${keyword}"></div>
+            <div class="bxh_head-content"  th:text="'Thông qua phân tích, có vẻ như bạn đang cảm thấy '+${emotion}+'. Một số phim sau sẽ phù hợp với tâm trạng hiện tại của bạn.'"></div>
+        </div>
+        <div class="row">
+            <div class="col-2" th:each="data, dataStat : ${filmList}">
+                <a th:href="@{/film-info (id = ${data.filmID})}" class="film_link">
+                    <!--                            <a th:href="@{/watch (id=${data.getFilmID()}, ep=${data.episodeList[0].epID})}" class="film_link">-->
+                    <div class="film_movie film--cm_soon">
+
+                        <img th:src="${data.getImgPath()}" alt="" class="film_item_thumb" style=" height: 300px">
+                        <div class="film_info film_info--purple">
+                            <h3 class="film_name" th:text="${data.getFilmName()}"></h3>
+                            <div class="film_detail">
+                                <span class="film_title" th:text="${data.getFilmView(data.getFilmID())} + ' lượt xem'"></span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 56px;">
+            <div class="user_search disabled" th:text="${keyword}"></div>
+            <div class="survey_box" th:id = "${emotion_id}">
+                <div class="survey_text">
+                    Bạn có cảm thấy hài lòng với những đề xuất trên không?
+                </div>
+                <div class="survey_send">
+                    <button class="button_survey button_send_survey">Có</button>
+                    <button class="button_survey button_no_satify">Không</button>
+                </div>
+            </div>
+    </section>
+</div>
+
+<script th:replace="fragments::navbar_js"></script>
+<script type="text/javascript" th:src="@{/js/handle_survey.js}"></script>
+</body>
+</html>

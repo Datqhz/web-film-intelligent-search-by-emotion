@@ -22,4 +22,8 @@ public class RoleTest {
     public void get24FilmTopTier(){
         assertThat(filmService.getPageByType("MOVIE")).isGreaterThan(0);
     }
+    @Test
+    public void get(){
+        assertThat(filmService.getFilmForRecommned("Hành động").);
+    }
 }

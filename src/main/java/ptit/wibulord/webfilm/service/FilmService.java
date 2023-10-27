@@ -64,6 +64,32 @@ public class FilmService {
         }
         return tierList;
     }
+    public List<Film> getFilmForRecommned(String categoryName) {
+        List<Film> films = new ArrayList<>();
+        List<Integer> filmIds = new ArrayList<>();
+
+        try {
+            Connection con = Databasehelper.openConnection();
+            Statement stmt = con.createStatement();
+            String sql = "SELECT TOP 6 P.ID_PHIM,P.LUOTXEM, TL.TEN_TL\n" +
+                    "FROM (SELECT ID_PHIM, SUM(T.LUOTXEM) AS LUOTXEM FROM TAP T GROUP BY ID_PHIM )P,\n" +
+                    "CT_THELOAI CT,\n" +
+                    "THELOAI TL \n" +
+                    "WHERE P.ID_PHIM = CT.ID_PHIM AND CT.ID_TL = TL.ID_TL AND TL.TEN_TL = N'" + categoryName +
+                    "' ORDER BY P.LUOTXEM DESC";
+            ResultSet resultSet = stmt.executeQuery(sql);
+            while (resultSet.next()) {
+                filmIds.add(resultSet.getInt(1));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        for (int i : filmIds){
+            Film film = getFilmById(i);
+            films.add(film);
+        }
+        return films;
+    }
     public int getPageByCategory(String categoryName) {
         int count = 0;
         try {
@@ -103,6 +129,7 @@ public class FilmService {
         }
         return filmList;
     }
+
 
     public List<Film> getFilmByPage(int page){
         List<Film> filmList = new ArrayList<>();
